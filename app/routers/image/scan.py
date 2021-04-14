@@ -23,9 +23,9 @@ router = APIRouter(
 @router.post("/scan/")
 async def scan(file: bytes = File(...)):
     data = np.fromstring(file, dtype=np.uint8)
-    # binary_np = np.frombuffer(base64.b64decode(file), dtype=np.uint8)
 
     img = cv2.imdecode(data, cv2.IMREAD_ANYCOLOR)
+    img = cv2.resize(img, dsize=(500, 500), interpolation=cv2.INTER_AREA)
     img = cv_functions.remove_image_shadow(img)
     
     res, img = cv2.imencode(".png", img)
