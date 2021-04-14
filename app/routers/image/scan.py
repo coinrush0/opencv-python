@@ -27,6 +27,6 @@ async def scan(file: bytes = File(...)):
 
     img = cv2.imdecode(data, cv2.IMREAD_ANYCOLOR)
     img = cv_functions.remove_image_shadow(img)
-
-    cv2.imwrite('image/shadows_out.png', img)
-    return FileResponse('image/shadows_out.png', media_type="image/png")
+    
+    res, img = cv2.imencode(".png", img)
+    return StreamingResponse(io.BytesIO(img.tobytes()), media_type="image/png")
