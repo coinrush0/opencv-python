@@ -25,20 +25,24 @@ async def scan(file: bytes = File(...)):
     data = np.fromstring(file, dtype=np.uint8)
 
     img = cv2.imdecode(data, cv2.IMREAD_ANYCOLOR)
-    height, width, channel = img.shape
+    try:
+        height, width, channel = img.shape
+    except ValueError:
+        height, width = img.shape
 
+    limitSize = 1080
     if height > width:
-        if height > 640:
+        if height > limitSize:
             ratio = height / width
-            height = 640
-            width = 640 / ratio
+            height = limitSize
+            width = limitSize / ratio
     else:
-        if width > 640:
+        if width > limitSize:
             ratio = width / height
-            width = 640
-            height = 640 / ratio
+            width = limitSize
+            height = limitSize / ratio
     
-    dsize = (int(height), int(width))
+    dsize = (int(width), int(height))
     img = cv2.resize(img, dsize, interpolation=cv2.INTER_AREA)
     img = cv_functions.remove_image_shadow(img)
     
