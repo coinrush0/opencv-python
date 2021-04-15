@@ -26,7 +26,7 @@ async def scan(file: bytes = File(...)):
 
     img = cv2.imdecode(data, cv2.IMREAD_ANYCOLOR)
     height, width, channel = img.shape
-    
+
     if height > width:
         if height > 640:
             height = 640
@@ -35,7 +35,7 @@ async def scan(file: bytes = File(...)):
     else:
         if width > 640:
             width = 640
-            ratio = width / width
+            ratio = width / height
             height = 640 / ratio
     
     dsize = (int(height), int(width))
